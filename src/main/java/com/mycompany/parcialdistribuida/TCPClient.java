@@ -16,7 +16,7 @@ public class TCPClient {
 
     public static void main(String[] args) {
         try {
-            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/ClientSource/random.txt";
+            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/ClientSource/test.txt";
             File file = new File(filePath);
             FileInputStream fileStream = new FileInputStream(filePath);
 

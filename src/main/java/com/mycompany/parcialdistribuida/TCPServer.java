@@ -14,39 +14,22 @@ import java.io.*;
 
 public class TCPServer {
 
-    public static void main(String[] args) {
+    Boolean Listening = true;
+    
+    public TCPServer() {
+        final int PORT = 9090;
+        int nConnections = 1;
         try {
-            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/GatewayDest/";
-            File file = new File(filePath);
-            System.out.println("File description");
-            //System.out.println("Name: " + file.getName());
-            System.out.println("Can read: " + file.canRead());
 
-            ServerSocket server = new ServerSocket(9090);
-            System.out.println("Waiting for client to connect");
-            Socket clientSocket = server.accept();
-            InputStream clientIs = clientSocket.getInputStream();
-            ObjectInputStream fileData = new ObjectInputStream(clientIs);
-            String[] data = (String[]) fileData.readObject();
+            ServerSocket server = new ServerSocket(PORT);
 
-            String fileName = data[0];
-            Long fileSize = Long.parseLong(data[1]);
-
-            FileOutputStream fr = new FileOutputStream(filePath + fileName);
-            Long packetSize = 1000l;
-            Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
-            System.out.println("Number of tranfers " + Ntransfer);
-
-            byte[] b = new byte[Math.toIntExact(packetSize)];
-            for (int i = 0; i < Ntransfer; i++) {
-                System.out.println("Pack received");
-                if (i == Ntransfer) {
-                    b = new byte[Math.toIntExact(fileSize - Ntransfer * packetSize)];
-                }
-                clientIs.read(b, 0, b.length);
-                fr.write(b, 0, b.length);
+            while (Listening) {
+                System.out.println("Waiting for client to connect");
+                Socket newClientSocket = server.accept();
+                System.out.println("New connection. Socket number" + nConnections); nConnections++;
+                ConnectionHandler newConnection = new ConnectionHandler(newClientSocket);
+                newConnection.start();
             }
-
         } catch (FileNotFoundException fnfe) {
             System.err.println("File error: " + fnfe);
         } catch (IOException ioe) {
@@ -54,5 +37,49 @@ public class TCPServer {
         } catch (Exception e) {
             System.err.println("Error " + e);
         }
+    }
+
+    class ConnectionHandler extends Thread {
+
+        Socket newClient;
+        String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/GatewayDest/";
+
+        public ConnectionHandler(Socket _newClient) {
+            newClient = _newClient;
+        }
+
+        public void run() {
+            try {
+                InputStream clientIs = newClient.getInputStream();
+                ObjectInputStream fileData = new ObjectInputStream(clientIs);
+                String[] data = (String[]) fileData.readObject();
+
+                String fileName = data[0];
+                Long fileSize = Long.parseLong(data[1]);
+
+                FileOutputStream fr = new FileOutputStream(filePath + fileName);
+                Long packetSize = 1000l;
+                Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
+                System.out.println("Number of tranfers " + Ntransfer);
+
+                byte[] b = new byte[Math.toIntExact(packetSize)];
+                for (int i = 0; i < Ntransfer; i++) {
+                    System.out.println("Packet " + i + " received from " + Thread.currentThread());
+                    if (i == Ntransfer-1) {
+                        b = new byte[Math.toIntExact(fileSize - (Ntransfer-1) * packetSize)];
+                    }
+                    clientIs.read(b, 0, b.length);
+                    fr.write(b, 0, b.length);
+                }
+            } catch (IOException ioe) {
+                System.err.println("I/O Error: " + ioe);
+            } catch (ClassNotFoundException cnfe) {
+                System.err.println("Error on readObject: " + cnfe);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new TCPServer();
     }
 }
