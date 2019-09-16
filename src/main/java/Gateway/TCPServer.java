@@ -58,13 +58,13 @@ public class TCPServer {
                 Long fileSize = Long.parseLong(data[1]);
 
                 FileOutputStream fr = new FileOutputStream(filePath + fileName);
-                Long packetSize = 5000l;
+                Long packetSize = 15000l;
                 Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
                 System.out.println("Number of tranfers " + Ntransfer);
 
                 byte[] b = new byte[Math.toIntExact(packetSize)];
                 for (int i = 0; i < Ntransfer; i++) {
-                    //System.out.println("Packet " + i + " received from " + Thread.currentThread());
+                    System.out.println("Packet " + i + " received from " + Thread.currentThread());
                     if (i == Ntransfer-1) {
                         b = new byte[Math.toIntExact(fileSize - (Ntransfer-1) * packetSize)];
                     }

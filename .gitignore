@@ -1,2 +1,2 @@
-src/main/java/com/mycompany/parcialdistribuida/ClientSource/
-src/main/java/com/mycompany/parcialdistribuida/GatewayDest/
+src/main/java/Gateway/Destination/
+src/main/java/Client/Source/

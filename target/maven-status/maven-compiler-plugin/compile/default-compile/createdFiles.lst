@@ -1,3 +1,5 @@
-Client/TCPClient.class
 Gateway/TCPServer.class
+Gateway/MulticastServer.class
 Gateway/TCPServer$ConnectionHandler.class
+Client/TCPClient.class
+Storage/MulticastReceptor.class

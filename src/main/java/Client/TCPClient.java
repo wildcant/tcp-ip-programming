@@ -16,7 +16,7 @@ public class TCPClient {
 
     public static void main(String[] args) {
         try {
-            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Client/Source/test.txt";
+            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Client/Source/WordFile.odt";
             File file = new File(filePath);
             FileInputStream fileStream = new FileInputStream(filePath);
 
@@ -33,9 +33,9 @@ public class TCPClient {
             ObjectOutputStream fileInfo = new ObjectOutputStream(socketOs);
             fileInfo.writeObject(data);
 
-            Long packetSize = 5000l;
+            Long packetSize = 15000l;
             Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
-            System.out.println("Number of packets to send: " + Ntransfer);
+            System.out.println("Number of packets  to send: " + Ntransfer);
 
             byte[] b = new byte[Math.toIntExact(packetSize)];
             for (int i = 0; i < Ntransfer; i++) {
