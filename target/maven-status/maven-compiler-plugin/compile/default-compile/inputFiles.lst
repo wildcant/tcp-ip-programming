@@ -1,2 +1,2 @@
-/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/TCPClient.java
-/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/TCPServer.java
+/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Client/TCPClient.java
+/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Gateway/TCPServer.java

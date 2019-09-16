@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.parcialdistribuida;
+package Client;
 
 /**
  *
@@ -16,7 +16,7 @@ public class TCPClient {
 
     public static void main(String[] args) {
         try {
-            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/ClientSource/test.txt";
+            String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Client/Source/test.txt";
             File file = new File(filePath);
             FileInputStream fileStream = new FileInputStream(filePath);
 
@@ -33,18 +33,20 @@ public class TCPClient {
             ObjectOutputStream fileInfo = new ObjectOutputStream(socketOs);
             fileInfo.writeObject(data);
 
-            Long packetSize = 1000l;
+            Long packetSize = 5000l;
             Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
             System.out.println("Number of packets to send: " + Ntransfer);
 
             byte[] b = new byte[Math.toIntExact(packetSize)];
             for (int i = 0; i < Ntransfer; i++) {
-                System.out.println("Pack send");
+                //System.out.println("Pack send");
                 // Define byte array and copy file on it
                 fileStream.read(b, 0, b.length);
                 // Get socket pipe to write to client
                 socketOs.write(b, 0, b.length);
             }
+            fileStream.close();
+            socket.close();
 
         } catch (Exception e) {
             System.err.println("Error" + e);

@@ -1,3 +1,3 @@
-com/mycompany/parcialdistribuida/TCPServer$ConnectionHandler.class
-com/mycompany/parcialdistribuida/TCPClient.class
-com/mycompany/parcialdistribuida/TCPServer.class
+Client/TCPClient.class
+Gateway/TCPServer.class
+Gateway/TCPServer$ConnectionHandler.class

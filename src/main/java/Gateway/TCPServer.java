@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.parcialdistribuida;
+package Gateway;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.net.*;
 import java.io.*;
 
 public class TCPServer {
-
+    
     Boolean Listening = true;
     
     public TCPServer() {
@@ -26,7 +26,7 @@ public class TCPServer {
             while (Listening) {
                 System.out.println("Waiting for client to connect");
                 Socket newClientSocket = server.accept();
-                System.out.println("New connection. Socket number" + nConnections); nConnections++;
+                System.out.println("New connection on socket number " + nConnections); nConnections++;
                 ConnectionHandler newConnection = new ConnectionHandler(newClientSocket);
                 newConnection.start();
             }
@@ -42,7 +42,7 @@ public class TCPServer {
     class ConnectionHandler extends Thread {
 
         Socket newClient;
-        String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/com/mycompany/parcialdistribuida/GatewayDest/";
+        String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Gateway/Destination/";
 
         public ConnectionHandler(Socket _newClient) {
             newClient = _newClient;
@@ -58,19 +58,23 @@ public class TCPServer {
                 Long fileSize = Long.parseLong(data[1]);
 
                 FileOutputStream fr = new FileOutputStream(filePath + fileName);
-                Long packetSize = 1000l;
+                Long packetSize = 5000l;
                 Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
                 System.out.println("Number of tranfers " + Ntransfer);
 
                 byte[] b = new byte[Math.toIntExact(packetSize)];
                 for (int i = 0; i < Ntransfer; i++) {
-                    System.out.println("Packet " + i + " received from " + Thread.currentThread());
+                    //System.out.println("Packet " + i + " received from " + Thread.currentThread());
                     if (i == Ntransfer-1) {
                         b = new byte[Math.toIntExact(fileSize - (Ntransfer-1) * packetSize)];
                     }
                     clientIs.read(b, 0, b.length);
                     fr.write(b, 0, b.length);
                 }
+                System.out.println("File " + fileName + " finished!");
+                fr.close();
+                newClient.close();
+                
             } catch (IOException ioe) {
                 System.err.println("I/O Error: " + ioe);
             } catch (ClassNotFoundException cnfe) {
