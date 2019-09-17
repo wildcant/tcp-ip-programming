@@ -11,6 +11,7 @@ import java.util.*;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+
 /**
  *
  * @author will
@@ -44,43 +45,42 @@ public class MulticastServer extends Thread {
         }
     }
 
-    public static void SendFile() {
+    public void SendFile() {
         try {
             String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Gateway/Destination/SomeText.txt";
             File file = new File(filePath);
             FileInputStream fileStream = new FileInputStream(filePath);
 
             String fileName = file.getName();
+            String fileNameToSend = "N " + fileName;
+            
             Long fileSize = file.length();
-            String[] data = {fileName, Long.toString(fileSize)};
+            String flSize = "S " + Long.toString(fileSize);
+            
             System.out.println("File description");
 
-            System.out.println("Filename: " + data[0] + "\nFiles size: " + data[1]);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            new ObjectOutputStream(out).writeObject(data);
+            System.out.println("Filename: " + fileName + "\nFiles size: " + fileSize);
             
-            String yourString = new String(Hex.encodeHex(out.toByteArray()));
-            System.out.println(yourString);
-            // deserialize
-            ByteArrayInputStream in = new ByteArrayInputStream(Hex.decodeHex(yourString.toCharArray()));
-            System.out.println(Arrays.toString((String[]) new ObjectInputStream(in).readObject()));
-/*
+            DatagramPacket packetFileSize = new DatagramPacket(flSize.getBytes(), flSize.length(), ipAddress, port);
+            DatagramPacket packetFileName = new DatagramPacket(fileNameToSend.getBytes(), fileNameToSend.length(), ipAddress, port);
+            
+            multicastSocket.send(packetFileSize);
+            multicastSocket.send(packetFileName);
+            
+
             Long packetSize = 5000l;
             Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
             System.out.println("Number of packets to send: " + Ntransfer);
 
             byte[] b = new byte[Math.toIntExact(packetSize)];
+            
             for (int i = 0; i < Ntransfer; i++) {
                 fileStream.read(b, 0, b.length);
-                InetAddress group = InetAddress.getByName("10.20.58.143");
-                DatagramPacket packet = new DatagramPacket(str.getBytes(), str.length(), group, port);
+                DatagramPacket packet = new DatagramPacket(b, b.length, ipAddress, port);
                 multicastSocket.send(packet);
             }
             fileStream.close();
-
-            System.out.println(out);
-             */
+             
         } catch (Exception e) {
             System.err.println("Error " + e);
         }
