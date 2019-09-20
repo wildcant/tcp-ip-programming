@@ -1,5 +1,10 @@
 Gateway/TCPServer.class
-Gateway/MulticastServer.class
 Gateway/TCPServer$ConnectionHandler.class
-Client/TCPClient.class
+Storage/test.class
 Storage/MulticastReceptor.class
+Gateway/MulticastServer$SendFile.class
+Gateway/webService.class
+Storage/test$ReceiveFile.class
+Gateway/MulticastServer.class
+Client/TCPClient.class
+Client/webClient.class

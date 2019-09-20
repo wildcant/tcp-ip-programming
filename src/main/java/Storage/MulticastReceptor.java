@@ -7,6 +7,7 @@ package Storage;
 
 import java.io.*;
 import java.net.*;
+import java.math.*;
 
 /**
  *
@@ -15,10 +16,9 @@ import java.net.*;
 public class MulticastReceptor {
 
     public static void main(String[] args) {
+        boolean Listening = true;
         int port = 9090;
         try {
-            String fileSize = null;
-            String fileName = null;
             MulticastSocket multicastSocket = new MulticastSocket(port);
             InetAddress address = InetAddress.getByName("224.0.0.2");
             multicastSocket.joinGroup(address);
@@ -29,35 +29,28 @@ public class MulticastReceptor {
 
             multicastSocket.receive(packet);
             String res = new String(packet.getData(), 0, packet.getLength());
-            String[] words = res.split("\\s");
-            char st = res.charAt(0);
-            if (st == 'S') {
-                fileSize = words[1].toString();
-            }
-            multicastSocket.receive(packet);
-            res = new String(packet.getData(), 0, packet.getLength());
-
-            words = res.split("\\s");
-            st = res.charAt(0);
-            if (st == 'N') {
-                fileName = words[1].toString();
-            }
+            String[] fileData = res.split("\\s");
+            String fileName = fileData[0];
+            String fileSize = fileData[1];
             System.out.println("File size; " + fileSize + "\nFile name: " + fileName);
 
             String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/src/main/java/Storage/Destination/";
+            System.out.println(filePath + fileName);
             FileOutputStream fr = new FileOutputStream(filePath + fileName);
 
-            Long packetSize = 5000l;
-            Long Ntransfer = Math.floorDiv(Long.parseLong(fileSize), Long.parseLong(fileSize)) + 1;
-            System.out.println("Number of packets to send: " + Ntransfer);
-            
+            Long packetSize = 1300L;
+            Long Ntransfer = Math.floorDiv(Long.parseLong(fileSize), packetSize) + 1;
+            System.out.println("Number of packets to receive: " + Ntransfer);
+
             byte[] b = new byte[Math.toIntExact(packetSize)];
             for (int i = 0; i < Ntransfer; i++) {
                 multicastSocket.receive(packet);
                 fr.write(packet.getData(), 0, packet.getLength());
+                System.out.println(i + " packt Recieve");
             }
-            
+            System.out.println(fileName + " finished! from multicast server");
             fr.close();
+
             multicastSocket.close();
         } catch (Exception e) {
             System.err.println("Error " + e);

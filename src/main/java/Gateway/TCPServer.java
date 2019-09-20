@@ -9,20 +9,21 @@ package Gateway;
  *
  * @author will
  */
+import Gateway.MulticastServer;
+import Gateway.MulticastServer.SendFile;
 import java.net.*;
 import java.io.*;
 
 public class TCPServer {
     
     Boolean Listening = true;
-    
+    MulticastServer multicastServer;
     public TCPServer() {
         final int PORT = 9090;
         int nConnections = 1;
         try {
-
+            multicastServer = new MulticastServer();
             ServerSocket server = new ServerSocket(PORT);
-
             while (Listening) {
                 System.out.println("Waiting for client to connect");
                 Socket newClientSocket = server.accept();
@@ -58,7 +59,7 @@ public class TCPServer {
                 Long fileSize = Long.parseLong(data[1]);
 
                 FileOutputStream fr = new FileOutputStream(filePath + fileName);
-                Long packetSize = 15000l;
+                Long packetSize = 1300l;
                 Long Ntransfer = Math.floorDiv(fileSize, packetSize) + 1;
                 System.out.println("Number of tranfers " + Ntransfer);
 
@@ -71,8 +72,10 @@ public class TCPServer {
                     clientIs.read(b, 0, b.length);
                     fr.write(b, 0, b.length);
                 }
-                System.out.println("File " + fileName + " finished!");
+                System.out.println("File " + fileName + " finished! from tcp server");
+                SendFile sendNewFile =  multicastServer.new SendFile(filePath+fileName);
                 fr.close();
+                
                 newClient.close();
                 
             } catch (IOException ioe) {
