@@ -66,7 +66,7 @@ public class Middlewares {
   @Produces(MediaType.TEXT_PLAIN)
   @Path("files/{filename}")
   public Response sendFile(@PathParam("filename") String fileName) {
-    String endpoint = "http://localhost:8080/WebServerDemo/resources/server/files/" + fileName;
+    String endpoint =  GatewayAdmin.getServerHostnames().get(0)  + "/resources/server/files/" + fileName;
     Client client = ClientBuilder.newClient();
     WebTarget resource = client.target(endpoint);
     Response response = resource.request().get();

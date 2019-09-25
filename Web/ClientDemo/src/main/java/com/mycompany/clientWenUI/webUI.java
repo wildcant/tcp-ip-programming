@@ -4,6 +4,7 @@ import com.mycompany.clientdemo.WebClient;
 import java.util.List;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.swing.SwingWorker;
@@ -220,7 +221,7 @@ public class webUI extends javax.swing.JFrame {
           System.out.println("Packets size: " + packetSize);
           System.out.println("Number of packets: " + NumberOfPackets);
           Long currentAmount = 0l;
-          float filePorcentage;
+          float filePorcentage = 0;
           byte[] buff = new byte[packetSize];
           while ((count = io.read(buff, 0, buff.length)) != -1) {
             currentPacket++;
@@ -228,17 +229,18 @@ public class webUI extends javax.swing.JFrame {
             filePorcentage = (float) currentAmount / fileSize * 100;
             publish(Math.round(filePorcentage));
             // System.out.println(currentPacket + ". Packet received of size " + count + ". Current amount " + currentAmount);
-            System.out.println(filePorcentage);
             os.write(buff, 0, count);
           }
+          System.out.println(filePorcentage);
+          response.close();
           os.close();
-          io.close();
         } else {
           System.out.println("Response code :" + response.getStatus());
         }
       } catch (FileNotFoundException fnfe) {
         System.err.println(fnfe);
-      } catch (Exception e) {
+      } catch (IOException e) {
+        System.out.println("HEre");
         System.err.println(e);
       }
       return 100.0;
@@ -258,8 +260,7 @@ public class webUI extends javax.swing.JFrame {
 
     @Override
     protected void process(List<Integer> chunks) {
-      System.out.println("process() esta en el hilo "
-          + Thread.currentThread().getName());
+      //System.out.println("process() esta en el hilo "+ Thread.currentThread().getName());
       pbar.setValue(chunks.get(0));
     }
   }

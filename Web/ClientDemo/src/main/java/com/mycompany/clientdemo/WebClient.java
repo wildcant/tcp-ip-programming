@@ -59,7 +59,7 @@ public class WebClient {
       Client client = ClientBuilder.newClient();
       WebTarget resource = client.target(endpoint);
       Response response = resource.request().get();
-
+      
       OutputStream os = new FileOutputStream("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/ClientDemo/src/main/java/com/mycompany/clientdemo/files/" + fileName);
       if (response.getStatus() == 200) {
         InputStream io = (InputStream) response.readEntity(InputStream.class);
