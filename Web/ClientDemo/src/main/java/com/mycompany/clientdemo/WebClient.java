@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
  * @author will
  */
 public class WebClient {
-
+      
   public String listFiles() {
     try {
       String endpoint = "http://localhost:8080/GatewayDemo/resources/gateway";
@@ -53,7 +53,7 @@ public class WebClient {
     }
   }
 
-  public String downloadFile(String fileName) throws FileNotFoundException {
+  public String downloadFile(String fileName, Long fileSize) throws FileNotFoundException {
     try {
       String endpoint = "http://localhost:8080/WebServerDemo/resources/server/files/" + fileName;
       Client client = ClientBuilder.newClient();
@@ -61,17 +61,25 @@ public class WebClient {
       Response response = resource.request().get();
 
       OutputStream os = new FileOutputStream("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/ClientDemo/src/main/java/com/mycompany/clientdemo/files/" + fileName);
-      System.out.println(new Date() + " : Reached point A");
-
       if (response.getStatus() == 200) {
-        System.out.println(new Date() + " : Reached point B");
         InputStream io = (InputStream) response.readEntity(InputStream.class);
 
-        byte[] buff = new byte[1400];
+        int packetSize = 1400;
+        int currentPacket = 0;
+        Long NumberOfPackets =  Math.floorDiv(fileSize, packetSize) + 1;
         int count;
+        
+        System.out.println("Packets size: " + packetSize);
+        System.out.println("File size: " + fileSize);
+        System.out.println("Number of packets: " + NumberOfPackets);
+        Long currentAmount = 0l;
+        byte[] buff = new byte[packetSize];
         while ((count = io.read(buff, 0, buff.length)) != -1) {
-          System.out.println("buffer to send" + count);
-          System.out.println(count);
+          currentPacket++;
+          currentAmount = currentAmount + count ;
+          float filePorcentage = (float) currentAmount/fileSize * 100;
+          // System.out.println(currentPacket + ". Packet received of size " + count + ". Current amount " + currentAmount);
+          System.out.println(filePorcentage);
           os.write(buff, 0, count);
         }
         os.close();
@@ -79,11 +87,10 @@ public class WebClient {
       } else {
         System.out.println("Response code :" + response.getStatus());
       }
-      return "here";
-    } catch(FileNotFoundException fnfe){
+      return fileName + " finished!";
+    } catch (FileNotFoundException fnfe) {
       return "error FileNotFoundException " + fnfe;
-    } 
-    catch (Exception e) {
+    } catch (Exception e) {
       return "error " + e;
     }
   }

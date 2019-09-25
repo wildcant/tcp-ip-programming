@@ -10,31 +10,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import com.mycompany.webserverdemo.Utilities;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.Inet4Address;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
-import sun.java2d.pipe.BufferedBufImgOps;
 
 /**
  *
@@ -53,9 +44,14 @@ public class ServerResource {
   public String getHtml() {
     System.out.println("Restful server");
     List<String> listFiles = ut.getList();
+    List<Long> filesSize = ut.getFilesSize();
     String list = "";
     for (String fileName : listFiles) {
       list = list + fileName + ",";
+    }
+    list = list + ";";
+    for (Long fileSize : filesSize) {
+      list = list + Long.toString(fileSize) + ",";
     }
     return (list);
   }

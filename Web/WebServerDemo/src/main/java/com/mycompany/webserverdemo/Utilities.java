@@ -28,7 +28,19 @@ public class Utilities {
       return (new ArrayList<String>());
     }
   }
-  public String getIp(){
+
+  public List<Long> getFilesSize() {
+    try ( Stream<Path> walk = Files.walk(Paths.get("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/WebServerDemo/src/main/java/com/mycompany/webserverdemo/files/"))) {
+      List<Long> filesSize = walk.filter(Files::isRegularFile).map(x -> x.toFile().length()).collect(Collectors.toList());
+      System.out.println(filesSize);
+      return (filesSize);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return (new ArrayList<Long>());
+    }
+  }
+
+  public String getIp() {
     try {
       InetAddress ip = InetAddress.getLocalHost();
       return ip.getHostAddress();
@@ -37,7 +49,7 @@ public class Utilities {
       return "not able to get ip";
     }
   }
-  
+
   /*
   public String getDir() {
     Properties p = System.getProperties();
