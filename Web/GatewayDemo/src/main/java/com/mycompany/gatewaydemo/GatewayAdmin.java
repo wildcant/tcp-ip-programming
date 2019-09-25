@@ -13,31 +13,25 @@ import java.util.ArrayList;
  */
 public class GatewayAdmin {
 
-  public ArrayList<String> serverHostnames;
-  public int i;
-
-  public GatewayAdmin() {
-    this.serverHostnames = new ArrayList<>();
-    this.i = 0;
-    System.out.println("GatewayAdmin iniciado");
-  }
+  public static ArrayList<String> serverHostnames = new ArrayList<String>() ;
+  public static  int i;
 
   //Getters
-  public ArrayList<String> getServerHostnames() {
-    return this.serverHostnames;
+  public static ArrayList<String> getServerHostnames() {
+    return serverHostnames;
   }
 
-  public int getI() {
-    return this.i;
+  public static int getI() {
+    return i;
   }
 
   // "Setter"
-  public void addServer(String server) {
-    this.serverHostnames.add(server);
+  public static void addServer(String server) {
+    serverHostnames.add(server);
   }
 
-  public void incI() {
-    this.i = this.i + 1;
+  public static void incI() {
+    i = i + 1;
   }
 
 }

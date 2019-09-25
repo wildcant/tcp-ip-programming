@@ -26,15 +26,14 @@ import com.mycompany.gatewaydemo.GatewayAdmin;
 @Path("gateway")
 public class Middlewares {
 
-  GatewayAdmin gt = new GatewayAdmin();
-
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String test() {
-    System.out.println(gt.getServerHostnames().size());
-    if (gt.getServerHostnames().size() > 0) {
+    System.out.println(GatewayAdmin.getServerHostnames().size());
+    if (GatewayAdmin.getServerHostnames().size() > 0) {
       try {
-        String endpoint = gt.getServerHostnames().get(0);
+        String endpoint = GatewayAdmin.getServerHostnames().get(0) + "resources/server/";
+        System.out.println(endpoint);
         String methodType = "GET";
         URL url = new URL(endpoint);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -71,19 +70,23 @@ public class Middlewares {
     Client client = ClientBuilder.newClient();
     WebTarget resource = client.target(endpoint);
     Response response = resource.request().get();
-    gt.incI();
-    System.out.println(gt.getI());
+    GatewayAdmin.incI();
+    System.out.println(GatewayAdmin.getI());
     return response;
   }
 
   @POST
   @Path("newserver")
   public int AddNewServer(@FormParam("serverURI") String serverURI) {
-    gt.addServer(serverURI);
+    for (String serverHostname : GatewayAdmin.getServerHostnames()) {
+      System.out.println("Compare " + serverHostname + " and " + serverURI);
+      if (serverHostname.equals(serverURI)) {
+        System.out.println("Are the same");
+        return GatewayAdmin.getServerHostnames().indexOf(serverURI) + 1;
+      }
+    }
     System.out.println("New server at " + serverURI);
-    System.out.println(gt.serverHostnames.size());
-    System.out.println(gt.serverHostnames);
-    return gt.serverHostnames.size();
+    GatewayAdmin.addServer(serverURI);
+    return GatewayAdmin.serverHostnames.size();
   }
-
 }
