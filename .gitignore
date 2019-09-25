@@ -1,2 +1,3 @@
-src/main/java/Gateway/Destination/
-src/main/java/Client/Source/
+Tcp-Udp/src/main/java/Gateway/Destination/
+Tcp-Udp/src/main/java/Client/Source/
+Web/ClientDemo/src/main/java/com/mycompany/clientdemo/files/

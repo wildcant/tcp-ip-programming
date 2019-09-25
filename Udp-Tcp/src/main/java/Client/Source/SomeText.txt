@@ -1,0 +1,15 @@
+Fractal
+Un fractal es un objeto geométrico cuya estructura básica, 
+fragmentada o aparentemente irregular, se repite a diferentes 
+escalas.1​ El término fue propuesto por el matemático Benoît 
+Mandelbrot en 1975 y deriva del latín fractus, que significa 
+quebrado o fracturado. Muchas estructuras naturales son de tipo 
+fractal. La propiedad matemática clave de un objeto genuinamente 
+fractal es que su dimensión métrica fractal es un número racional 
+no entero.
+
+Si bien el término "fractal" es reciente, los objetos hoy denominados 
+fractales eran bien conocidos en matemáticas desde principios del siglo 
+XX. Las maneras más comunes de determinar lo que hoy denominamos dimensión 
+fractal fueron establecidas a principios del siglo XX en el ámbito de la 
+teoría de la medida.

@@ -1,0 +1,5 @@
+com/mycompany/gatewaydemo/resources/JavaEE8Resource.class
+com/mycompany/gatewaydemo/GatewayAdmin.class
+com/mycompany/gatewaydemo/JAXRSConfiguration.class
+com/mycompany/gatewaydemo/Middlewares.class
+com/mycompany/gatewaydemo/ServerQuery.class
