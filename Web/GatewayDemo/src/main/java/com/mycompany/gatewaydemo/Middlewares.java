@@ -7,8 +7,6 @@ package com.mycompany.gatewaydemo;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -66,7 +64,9 @@ public class Middlewares {
   @Produces(MediaType.TEXT_PLAIN)
   @Path("files/{filename}")
   public Response sendFile(@PathParam("filename") String fileName) {
-    String endpoint =  GatewayAdmin.getServerHostnames().get(0)  + "/resources/server/files/" + fileName;
+    System.out.println("sendFile on middle");
+    String endpoint =  GatewayAdmin.getServerHostnames().get(0)  + "resources/server/files/" + fileName;
+    System.out.println(endpoint);
     Client client = ClientBuilder.newClient();
     WebTarget resource = client.target(endpoint);
     Response response = resource.request().get();

@@ -9,18 +9,30 @@ package com.mycompany.webserverdemo;
  *
  * @author will
  */
+import java.io.File;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.URL;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.*;
-import sun.security.x509.IPAddressName;
 
 public class Utilities {
 
+  private final URL filePath = Utilities.class.getResource("/files/");
+
+  public String getFilePath() {
+    try {
+      return Paths.get(filePath.toURI()).toString() + "/";
+    } catch (Exception e) {
+      System.err.println(e);
+      return "error";
+    }
+  }
+
   public List<String> getList() {
-    try ( Stream<Path> walk = Files.walk(Paths.get("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/WebServerDemo/src/main/java/com/mycompany/webserverdemo/files/"))) {
+    try ( Stream<Path> walk = Files.walk(Paths.get(filePath.toURI()))) {
       List<String> result = walk.filter(Files::isRegularFile).map(x -> x.getFileName().toString()).collect(Collectors.toList());
       return (result);
     } catch (Exception e) {
@@ -30,7 +42,7 @@ public class Utilities {
   }
 
   public List<Long> getFilesSize() {
-    try ( Stream<Path> walk = Files.walk(Paths.get("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/WebServerDemo/src/main/java/com/mycompany/webserverdemo/files/"))) {
+    try ( Stream<Path> walk = Files.walk(Paths.get(filePath.toURI()))) {
       List<Long> filesSize = walk.filter(Files::isRegularFile).map(x -> x.toFile().length()).collect(Collectors.toList());
       System.out.println(filesSize);
       return (filesSize);
@@ -49,18 +61,4 @@ public class Utilities {
       return "not able to get ip";
     }
   }
-
-  /*
-  public String getDir() {
-    Properties p = System.getProperties();
-    System.out.println(p.getProperty("java.class.path"));
-    Enumeration keys = p.keys();
-    while (keys.hasMoreElements()) {
-      String key = (String) keys.nextElement();
-      String value = (String) p.get(key);
-      System.out.println(key + ": " + value);
-    }
-    return p.getProperty("user.dir");
-  }
-   */
 }

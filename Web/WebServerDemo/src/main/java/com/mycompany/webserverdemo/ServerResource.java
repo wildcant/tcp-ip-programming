@@ -36,7 +36,6 @@ import javax.ws.rs.core.StreamingOutput;
 public class ServerResource {
 
   private final String gateWayIp = "127.0.0.1";
-  private final String filePath = "/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/WebServerDemo/src/main/java/com/mycompany/webserverdemo/files/";
   private Utilities ut = new Utilities();
 
   @GET
@@ -60,8 +59,10 @@ public class ServerResource {
   @Path("files/{filename}")
   @Produces("text/plain")
   public Response sendFile(@PathParam("filename") String filename) {
+    System.out.println("sendFile on server");
     try {
-      ResponseBuilder response = Response.ok(new FeedReturnStreamingOutput(filePath + filename));
+      System.out.println(ut.getFilePath());
+      ResponseBuilder response = Response.ok(new FeedReturnStreamingOutput(ut.getFilePath() + filename));
       return response.build();
 
     } catch (Exception e) {
@@ -74,6 +75,7 @@ public class ServerResource {
     String filePath;
 
     private FeedReturnStreamingOutput(String filename) {
+      System.out.println(filename);
       filePath = filename;
     }
 

@@ -1,6 +1,7 @@
 package com.mycompany.clientWenUI;
 
 import com.mycompany.clientdemo.WebClient;
+import java.io.File;
 import java.util.List;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,6 +22,7 @@ import org.omg.CORBA.Any;
 public class webUI extends javax.swing.JFrame {
 
   WebClient client = new WebClient();
+  String gatewayEndpoint;
   String[] lista;
   String[] sizes;
 
@@ -41,6 +43,9 @@ public class webUI extends javax.swing.JFrame {
     pbar = new javax.swing.JProgressBar();
     title1 = new javax.swing.JLabel();
     etiqueta = new javax.swing.JLabel();
+    title2 = new javax.swing.JLabel();
+    jButton3 = new javax.swing.JButton();
+    gatewayIP = new javax.swing.JTextField();
 
     jButton1.setText("jButton1");
 
@@ -57,7 +62,7 @@ public class webUI extends javax.swing.JFrame {
     title.setText("Lista de archivos");
 
     fileList.setModel(new javax.swing.AbstractListModel<String>() {
-      String[] lista = getList();
+      String[] lista = {"Please connect to gateway"};
       public int getSize() { return lista.length; }
       public String getElementAt(int i) { return lista[i]; }
     });
@@ -74,35 +79,59 @@ public class webUI extends javax.swing.JFrame {
 
     etiqueta.setText("\"");
 
+    title2.setText("Gateway IP");
+
+    jButton3.setText("Conectar");
+    jButton3.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3ActionPerformed(evt);
+      }
+    });
+
+    gatewayIP.setText("127.0.0.1");
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addGap(42, 42, 42)
+        .addGap(35, 35, 35)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(title)
-          .addComponent(refreshBtn))
-        .addGap(18, 18, 18)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(pbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jButton2)
-          .addComponent(title1)
-          .addComponent(etiqueta))
-        .addContainerGap(111, Short.MAX_VALUE))
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(title2)
+            .addGap(32, 32, 32)
+            .addComponent(gatewayIP, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jButton3))
+          .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(title)
+              .addComponent(refreshBtn))
+            .addGap(18, 18, 18)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(pbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(jButton2)
+              .addComponent(title1)
+              .addComponent(etiqueta))))
+        .addContainerGap(118, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        .addGap(24, 24, 24)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(title2)
+          .addComponent(jButton3)
+          .addComponent(gatewayIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addGap(30, 30, 30)
             .addComponent(title)
             .addGap(23, 23, 23)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
           .addGroup(layout.createSequentialGroup()
-            .addGap(64, 64, 64)
+            .addGap(34, 34, 34)
             .addComponent(title1)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(pbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -112,7 +141,7 @@ public class webUI extends javax.swing.JFrame {
             .addComponent(jButton2)))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(refreshBtn)
-        .addContainerGap(100, Short.MAX_VALUE))
+        .addGap(43, 43, 43))
     );
 
     pack();
@@ -137,6 +166,15 @@ public class webUI extends javax.swing.JFrame {
     }
      */
   }//GEN-LAST:event_jButton2ActionPerformed
+
+  private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    if (client.testConnection(gatewayIP.getText())) {
+      gatewayEndpoint = "http://" + gatewayIP.getText() + ":8080/GatewayDemo/resources/gateway/";
+      getList();
+    } else {
+      System.out.println("No fue posible conectar con gateway");
+    }
+  }//GEN-LAST:event_jButton3ActionPerformed
 
   /**
    * @param args the command line arguments
@@ -175,20 +213,36 @@ public class webUI extends javax.swing.JFrame {
 
   public String[] getList() {
     System.out.println("Getting list");
-    String lstResponse = client.listFiles();
-    String[] listas = lstResponse.split(";");
-    lista = listas[0].split(",");
-    sizes = listas[1].split(",");
-    fileList.setModel(new javax.swing.AbstractListModel<String>() {
-      public int getSize() {
-        return lista.length;
-      }
+    System.out.println(gatewayEndpoint);
+    String lstResponse = client.listFiles(gatewayEndpoint);
+    if (lstResponse.equals("No server connected")) {
+      String[] list = {"No hay servidores conectados al gateway"};
+      fileList.setModel(new javax.swing.AbstractListModel<String>() {
+        public int getSize() {
+          return list.length;
+        }
 
-      public String getElementAt(int i) {
-        return lista[i];
-      }
-    });
-    return lista;
+        public String getElementAt(int i) {
+          return list[i];
+        }
+      });
+      return list;
+    } else {
+      System.out.println("here: " + lstResponse);
+      String[] listas = lstResponse.split(";");
+      lista = listas[0].split(",");
+      sizes = listas[1].split(",");
+      fileList.setModel(new javax.swing.AbstractListModel<String>() {
+        public int getSize() {
+          return lista.length;
+        }
+
+        public String getElementAt(int i) {
+          return lista[i];
+        }
+      });
+      return lista;
+    }
 
   }
 
@@ -199,17 +253,27 @@ public class webUI extends javax.swing.JFrame {
       // Mostramos el nombre del hilo, para ver que efectivamente
       // esto NO se ejecuta en el hilo de eventos.
       System.out.println("Iniciando hilo de descarga");
+      etiqueta.setText("Descargando");
       int i = fileList.getSelectedIndex();
       String fileName = lista[i];
       Long fileSize = Long.parseLong(sizes[i]);
+      String path = new File("").getAbsolutePath() + "/src/main/java/com/mycompany/clientdemo/files/" + fileName;
+      System.out.println(path);
       try {
-        String endpoint = "http://localhost:8080/WebServerDemo/resources/server/files/" + fileName;
+
+        //String endpoint = gatewayEndpoint + "files/" + fileName;
+        String endpoint = "http://localhost:8080/GatewayDemo/resources/gateway/files/" + fileName;
+        //String endpoint = "http://localhost:8080/WebServerDemo/resources/server/files/" + fileName;
+
+        System.out.println(endpoint);
         Client client = ClientBuilder.newClient();
         WebTarget resource = client.target(endpoint);
         Response response = resource.request().get();
 
-        OutputStream os = new FileOutputStream("/home/will/Escritorio/Distribuida/ParcialDistribuida/Web/ClientDemo/src/main/java/com/mycompany/clientdemo/files/" + fileName);
-        if (response.getStatus() == 200) {
+        OutputStream os = new FileOutputStream(path);
+        int resStatus = response.getStatus();
+        System.out.println(resStatus);
+        if (resStatus == 200) {
           InputStream io = (InputStream) response.readEntity(InputStream.class);
 
           int packetSize = 1400;
@@ -255,7 +319,7 @@ public class webUI extends javax.swing.JFrame {
 
       pbar.setValue(0);
 
-      etiqueta.setText("hecho");
+      etiqueta.setText("Hecho");
     }
 
     @Override
@@ -269,12 +333,15 @@ public class webUI extends javax.swing.JFrame {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel etiqueta;
   private javax.swing.JList<String> fileList;
+  private javax.swing.JTextField gatewayIP;
   private javax.swing.JButton jButton1;
   private javax.swing.JButton jButton2;
+  private javax.swing.JButton jButton3;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JProgressBar pbar;
   private javax.swing.JButton refreshBtn;
   private javax.swing.JLabel title;
   private javax.swing.JLabel title1;
+  private javax.swing.JLabel title2;
   // End of variables declaration//GEN-END:variables
 }
